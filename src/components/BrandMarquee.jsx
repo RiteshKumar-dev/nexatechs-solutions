@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-const logos = ['/Img3.png', '/Img4.png', '/Img5.png', '/Img6.png', '/Img7.png', '/Img8.png'];
+const logos = ['/Img3.png', '/Img4.png', '/Img5.jpg', '/Img6.png', '/Img7.png', '/Img8.png'];
 
 export default function BrandMarquee() {
   const repeatedLogos = [...logos, ...logos, ...logos, ...logos, ...logos];

@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { IconMenu2, IconX } from '@tabler/icons-react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
 import React, { useRef, useState } from 'react';
+import Link from 'next/link';
 
 // 🔹 MAIN NAVBAR WRAPPER (fixed + white background)
 export const Navbar = ({ children, className }) => {
@@ -18,13 +19,7 @@ export const Navbar = ({ children, className }) => {
   });
 
   return (
-    <motion.div
-      ref={ref}
-      className={cn(
-        'fixed inset-x-0 top-0 z-40 w-full bg-white shadow-md dark:bg-neutral-950', // ✅ fixed + bg-white
-        className,
-      )}
-    >
+    <motion.div ref={ref} className={cn('fixed inset-x-0 top-0 z-40 w-full', className)}>
       {React.Children.map(children, (child) =>
         React.isValidElement(child) ? React.cloneElement(child, { visible }) : child,
       )}
@@ -36,17 +31,11 @@ export const Navbar = ({ children, className }) => {
 export const NavBody = ({ children, className }) => {
   return (
     <motion.div
-      animate={{
-        y: 0,
-      }}
-      transition={{
-        type: 'spring',
-        stiffness: 200,
-        damping: 50,
-      }}
+      animate={{ y: 0 }}
+      transition={{ type: 'spring', stiffness: 200, damping: 50 }}
       className={cn(
-        'relative z-[60] mx-auto hidden w-full max-w-screen-xl flex-row items-center justify-between px-6 py-3 lg:flex',
-        'bg-white shadow-md rounded-none dark:bg-neutral-950', // ✅ white background, no rounding
+        'relative z-[60] mx-auto hidden w-full flex-row items-center justify-between px-6 py-3 lg:flex',
+        '',
         className,
       )}
     >
@@ -68,21 +57,21 @@ export const NavItems = ({ items, className, onItemClick }) => {
       )}
     >
       {items.map((item, idx) => (
-        <a
-          onMouseEnter={() => setHovered(idx)}
-          onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
-          key={`link-${idx}`}
-          href={item.link}
-        >
-          {hovered === idx && (
-            <motion.div
-              layoutId="hovered"
-              className="absolute inset-0 h-full w-full bg-gray-100 dark:bg-neutral-800"
-            />
-          )}
-          <span className="relative z-20">{item.name}</span>
-        </a>
+        <Link key={`link-${idx}`} href={item.link} passHref>
+          <a
+            onMouseEnter={() => setHovered(idx)}
+            onClick={onItemClick}
+            className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+          >
+            {hovered === idx && (
+              <motion.div
+                layoutId="hovered"
+                className="absolute inset-0 h-full w-full bg-white dark:bg-neutral-800"
+              />
+            )}
+            <span className="relative z-20">{item.name}</span>
+          </a>
+        </Link>
       ))}
     </motion.div>
   );
@@ -92,14 +81,10 @@ export const NavItems = ({ items, className, onItemClick }) => {
 export const MobileNav = ({ children, className }) => {
   return (
     <motion.div
-      transition={{
-        type: 'spring',
-        stiffness: 200,
-        damping: 50,
-      }}
+      transition={{ type: 'spring', stiffness: 200, damping: 50 }}
       className={cn(
         'relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between px-4 py-3 lg:hidden',
-        'bg-white shadow-md rounded-none dark:bg-neutral-950', // ✅ white bg + flat
+        'bg-white dark:bg-neutral-950',
         className,
       )}
     >
@@ -128,7 +113,7 @@ export const MobileNavMenu = ({ children, className, isOpen, onClose }) => {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
           className={cn(
-            'absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 bg-white px-6 py-8 shadow-md dark:bg-neutral-950 rounded-none',
+            'absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 px-6 py-8 dark:bg-neutral-950',
             className,
           )}
         >
@@ -151,20 +136,19 @@ export const MobileNavToggle = ({ isOpen, onClick }) => {
 // 🔹 LOGO
 export const NavbarLogo = () => {
   return (
-    <a
-      href="/"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black dark:text-white"
-    >
-      <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" width={30} height={30} />
-      <span className="font-medium">Startup</span>
-    </a>
+    <Link href="/" passHref>
+      <span className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black dark:text-white">
+        <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" width={30} height={30} />
+        <span className="font-medium">Startup</span>
+      </span>
+    </Link>
   );
 };
 
 // 🔹 BUTTON
 export const NavbarButton = ({
   href,
-  as: Tag = 'a',
+  as: Tag = 'button',
   children,
   className,
   variant = 'primary',
@@ -174,17 +158,23 @@ export const NavbarButton = ({
     'px-4 py-2 rounded-none text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center';
 
   const variantStyles = {
-    primary: 'bg-black text-white dark:bg-white dark:text-black shadow-md',
+    primary: 'bg-black text-white dark:bg-white dark:text-black',
     secondary:
       'bg-transparent border border-neutral-300 text-neutral-700 dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800',
   };
 
+  if (href) {
+    // ✅ Correct Next.js 13+ usage: no <a> child
+    return (
+      <Link href={href} className={cn(baseStyles, variantStyles[variant], className)} {...props}>
+        {children}
+      </Link>
+    );
+  }
+
+  // Default tag (button or custom tag)
   return (
-    <Tag
-      href={href || undefined}
-      className={cn(baseStyles, variantStyles[variant], className)}
-      {...props}
-    >
+    <Tag className={cn(baseStyles, variantStyles[variant], className)} {...props}>
       {children}
     </Tag>
   );

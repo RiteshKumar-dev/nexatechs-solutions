@@ -2,9 +2,9 @@
 
 export default function VideoSectionComponent() {
   return (
-    <div className="flex justify-center w-fullpx-4">
+    <div className="flex justify-center w-full px-4">
       <video
-        className="w-full max-w-[85vw] h-auto rounded-2xl shadow-lg"
+        className="w-full max-w-[95vw] h-auto rounded-2xl shadow-lg"
         controls
         autoPlay
         muted

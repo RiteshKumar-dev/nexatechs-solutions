@@ -3,6 +3,7 @@ import './globals.css';
 import NavbarComponent from '@/components/NavbarComponent';
 import FooterComponent from '@/components/FooterComponent';
 import StickyBannerFooterComponent from '@/components/StickyBannerFooterComponent';
+import FaqSection from '@/components/FaqSection';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,8 +27,8 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <NavbarComponent />
-        {/* Page-specific content */}
         <main className="flex-grow">{children}</main>
+        <FaqSection />
         <FooterComponent />
         <StickyBannerFooterComponent />
       </body>

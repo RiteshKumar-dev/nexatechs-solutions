@@ -18,15 +18,15 @@ import StickyBannerComponent from './StickyBannerComponent';
 
 export default function NavbarComponent() {
   const navItems = [
-    { name: 'AI Center of Excellence', link: 'aicoe', highlight: true },
-    { name: 'Case Studies', link: 'case-studies' },
-    { name: 'Services', link: 'services' },
-    { name: 'Industries', link: 'industries' },
-    { name: 'Insights', link: 'insights' },
-    { name: 'About Us', link: 'about' },
+    { name: 'AI Center of Excellence', link: '/services/ai-center-of-excellence' },
+    { name: 'Case Studies', link: '/case-studies' },
+    { name: 'Services', link: '/all-services' },
+    { name: 'Industries', link: '/industries' },
+    { name: 'Insights', link: '/blog' },
+    { name: 'About Us', link: '/about-us' },
   ];
 
-  const [active, setActive] = useState('AI Center of Excellence');
+  const [active, setActive] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [activeMegaType, setActiveMegaType] = useState(null);
@@ -48,15 +48,18 @@ export default function NavbarComponent() {
 
   return (
     <div className="relative w-full">
-      {/* StickyBanner should be first */}
+      {/* Sticky Banner */}
       <StickyBannerComponent />
-      <Navbar className="bg-white shadow-sm fixed top-13 md:top-10 z-50 w-full mx-auto px-6">
-        <NavBody className="bg-white text-gray-900">
+
+      <Navbar className="fixed top-12 md:top-10 z-50 w-full mx-auto px-6 bg-white">
+        <NavBody className="text-gray-900 ">
+          {/* Logo */}
           <NavbarLogo
             logoSrc="/logo.png"
             title="startups"
             className="text-gray-900 font-bold text-lg tracking-wide"
           />
+
           {/* Desktop Links */}
           <div className="flex items-center gap-10">
             {navItems.map((item) => (
@@ -71,24 +74,23 @@ export default function NavbarComponent() {
                   if (item.name === 'Services' || item.name === 'Industries') handleMegaMenuClose();
                 }}
               >
-                <Link href={item.link} passHref legacyBehavior>
-                  <a
-                    onClick={() => setActive(item.name)}
-                    className={`text-base font-medium transition-colors duration-300 ${
-                      active === item.name
-                        ? 'text-purple-700'
-                        : 'text-gray-800 hover:text-purple-700'
-                    }`}
+                {/* Desktop Nav Link */}
+                <Link
+                  href={item.link}
+                  className={`text-base font-medium transition-colors duration-300 ${
+                    active === item.name ? 'text-purple-700' : 'text-gray-800 hover:text-purple-700'
+                  }`}
+                  onClick={() => setActive(item.name)}
+                >
+                  <motion.span
+                    initial={{ y: 0 }}
+                    transition={{ duration: 0.22, ease: 'easeInOut' }}
                   >
-                    <motion.span
-                      initial={{ y: 0 }}
-                      transition={{ duration: 0.22, ease: 'easeInOut' }}
-                    >
-                      {item.name}
-                    </motion.span>
-                  </a>
+                    {item.name}
+                  </motion.span>
                 </Link>
 
+                {/* Underline */}
                 {active === item.name && (
                   <motion.div
                     layoutId="underline"
@@ -97,7 +99,7 @@ export default function NavbarComponent() {
                   />
                 )}
 
-                {/* Show relevant Mega Popup */}
+                {/* Mega Menus */}
                 {item.name === 'Services' && showMegaMenu && activeMegaType === 'services' && (
                   <MegaMenuPopup
                     open={showMegaMenu}
@@ -115,13 +117,17 @@ export default function NavbarComponent() {
               </div>
             ))}
           </div>
+
+          {/* Desktop Contact Button */}
           <NavbarButton
+            href="/contact-us"
             variant="primary"
             className="bg-black text-white px-6 py-2 rounded-md hover:opacity-80 transition"
           >
             Contact Us
           </NavbarButton>
         </NavBody>
+
         {/* Mobile Navigation */}
         <MobileNav className="bg-white text-gray-900 shadow-md">
           <MobileNavHeader>
@@ -131,29 +137,33 @@ export default function NavbarComponent() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             />
           </MobileNavHeader>
+
           <MobileNavMenu
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
             className="bg-white"
           >
             {navItems.map((item) => (
-              <Link key={item.name} href={item.link} passHref legacyBehavior>
-                <a
-                  onClick={() => {
-                    setActive(item.name);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`block py-3 px-4 rounded-md text-base font-medium transition-colors duration-300 ${
-                    item.highlight
-                      ? 'text-purple-700 font-semibold'
-                      : 'text-gray-800 hover:bg-purple-50 hover:opacity-80'
-                  }`}
-                >
-                  {item.name}
-                </a>
+              <Link
+                key={item.name}
+                href={item.link}
+                className={`block py-3 px-4 rounded-md text-base font-medium transition-colors duration-300 ${
+                  item.highlight
+                    ? 'text-purple-700 font-semibold'
+                    : 'text-gray-800 hover:bg-purple-50 hover:opacity-80'
+                }`}
+                onClick={() => {
+                  setActive(item.name);
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                {item.name}
               </Link>
             ))}
+
+            {/* Mobile Contact Button */}
             <NavbarButton
+              href="/contact-us"
               variant="primary"
               className="bg-black text-white w-full rounded-md mt-6 py-3"
             >
