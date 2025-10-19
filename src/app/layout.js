@@ -4,6 +4,8 @@ import NavbarComponent from '@/components/NavbarComponent';
 import FooterComponent from '@/components/FooterComponent';
 import StickyBannerFooterComponent from '@/components/StickyBannerFooterComponent';
 import FaqSection from '@/components/FaqSection';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,6 +28,20 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
+        {/* ✅ Enhanced Toast Container */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          pauseOnHover
+          draggable
+          pauseOnFocusLoss={false}
+          theme="light" // options: 'light' | 'dark' | 'colored'
+          limit={3}
+        />
+
         <NavbarComponent />
         <main className="flex-grow">{children}</main>
         <FaqSection />

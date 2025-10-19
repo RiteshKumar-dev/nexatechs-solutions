@@ -10,7 +10,7 @@ import VideoSectionComponent from '@/components/VideoSectionComponent';
 
 export default function Home() {
   return (
-    <div>
+    <>
       <BackgroundRippleEffectComponent />
       <BrandMarquee />
       <VideoSectionComponent />
@@ -20,6 +20,6 @@ export default function Home() {
       <ServicesSection />
       <GetInTouch />
       {/* <ConsultationPopup /> */}
-    </div>
+    </>
   );
 }

@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 // Configurations
 const brandLogos = ['/Img3.png', '/Img4.png', '/Img5.jpg', '/Img6.png', '/Img7.png', '/Img8.png'];
@@ -88,10 +89,10 @@ export default function StrategicConsultSection() {
     try {
       setLoading(true);
       await axios.post('/api/consultation', form);
-      alert('Success! Request submitted.');
+      toast.success('Success! Request submitted.');
       setForm({ firstName: '', lastName: '', company: '', email: '', phone: '', help: '' });
     } catch (err) {
-      alert('Form submission failed. Please retry.');
+      toast.error('Form submission failed. Please retry.');
       console.error(err);
     } finally {
       setLoading(false);
